@@ -26,6 +26,23 @@ const encode = async (req: Request, res: Response) => {
   }
 };
 
-const decode = async (req: Request, res: Response) => {};
+const decode = async (req: Request, res: Response) => {
+  const { url } = req.body;
+
+  const existingUrl = await Url.findOne({
+    where: {
+      shortUrl: url,
+    },
+  });
+
+  if (existingUrl) {
+    return res.status(200).json({ originalUrl: existingUrl.originalUrl });
+  } else {
+    return res.status(401).json({
+      error: true,
+      message: "A URL fornecida não está presente no sistema.",
+    });
+  }
+};
 
 export default { encode, decode };
