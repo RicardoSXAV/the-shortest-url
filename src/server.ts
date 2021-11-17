@@ -1,7 +1,6 @@
-import "reflect-metadata";
 import express from "express";
 import cors from "cors";
-import "./database";
+import database from "./database/config";
 
 import urlRoutes from "./routes/url";
 
@@ -13,5 +12,10 @@ app.use(express.json());
 app.listen(5000, () =>
   console.log("Server is running on http://localhost:5000")
 );
+
+database
+  .sync()
+  .then(() => console.log("Connected to database"))
+  .catch((error) => console.log(error));
 
 app.use("/url", urlRoutes);
