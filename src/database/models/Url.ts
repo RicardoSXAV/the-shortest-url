@@ -1,7 +1,12 @@
-import Sequelize from "sequelize";
+import Sequelize, { Model } from "sequelize";
 import database from "../config";
 
-const Url = database.define("url", {
+interface UrlAttributes extends Model {
+  originalUrl: string;
+  shortUrl: string;
+}
+
+const Url = database.define<UrlAttributes>("url", {
   originalUrl: {
     type: Sequelize.STRING,
     allowNull: false,
