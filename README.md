@@ -78,3 +78,31 @@ yarn dev
 ```
 
 * O servidor irá iniciar em http://localhost:5000.
+
+## Testes
+
+* Para conseguir rodar o comando de testes sem erros, é necessário fazer uma alteração no arquivo ```src/database/config.ts```:
+
+```Typescript
+// config.ts
+
+require("dotenv").config();
+import { Sequelize } from "sequelize";
+
+const testEnv = process.env.NODE_ENV;
+const host = testEnv ? "" : (process.env.DATABASE_URL as string);
+
+const sequelize = new Sequelize({
+  dialect: testEnv === "test" ? "sqlite" : "postgres",
+  storage: testEnv === "test" ? "./__tests__/database.sqlite" : "",
+});
+
+export default sequelize;
+```
+
+* Depois de alterar o arquivo, só rodar o comando de testes:
+
+```
+npm run test
+yarn test
+```
