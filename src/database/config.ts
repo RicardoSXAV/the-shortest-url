@@ -1,10 +1,13 @@
 require("dotenv").config();
 import { Sequelize } from "sequelize";
 
-const host = process.env.DATABASE_URL as string;
+const testEnv = process.env.NODE_ENV;
+const host = testEnv ? "" : (process.env.DATABASE_URL as string);
 
 const sequelize = new Sequelize(host, {
-  dialect: "postgres",
+  host: host,
+  dialect: testEnv === "test" ? "sqlite" : "postgres",
+  storage: testEnv === "test" ? "./__tests__/database.sqlite" : "",
   dialectOptions: {
     ssl: {
       require: true,
